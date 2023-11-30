@@ -15,6 +15,7 @@
 package v1alpha1
 
 import (
+	"go.opentelemetry.io/collector/config/configopaque"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
@@ -24,6 +25,10 @@ type OpAMPBridgeSpec struct {
 	// OpAMP backend Server endpoint
 	// +required
 	Endpoint string `json:"endpoint"`
+	// Headers is an optional map of headers to use when connecting to the OpAMP Server.
+	// Typically used to set access tokens or other authorization headers.
+	// +optional
+	Headers map[string]configopaque.String `json:"headers,omitempty"`
 	// Capabilities supported by the OpAMP Bridge
 	// +required
 	Capabilities map[OpAMPBridgeCapability]bool `json:"capabilities"`

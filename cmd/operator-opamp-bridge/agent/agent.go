@@ -18,6 +18,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/go-logr/logr"
@@ -146,6 +147,7 @@ func (agent *Agent) Start() error {
 	agent.startTime = uint64(agent.clock.Now().UnixNano())
 	settings := types.StartSettings{
 		OpAMPServerURL: agent.config.Endpoint,
+		Header:         agent.headersToHttpHeader(),
 		InstanceUid:    agent.instanceId.String(),
 		Callbacks: types.CallbacksStruct{
 			OnConnectFunc:              agent.onConnect,
@@ -182,6 +184,14 @@ func (agent *Agent) Start() error {
 	agent.logger.V(3).Info("OpAMP Client started.")
 
 	return nil
+}
+
+func (agent *Agent) headersToHttpHeader() http.Header {
+	newMap := make(map[string][]string)
+	for key, value := range agent.config.Headers {
+		newMap[key] = []string{string(value)}
+	}
+	return newMap
 }
 
 // runHeartbeat sets health on an interval to keep the connection active.

@@ -113,6 +113,8 @@ func (o OpAMPBridgeWebhook) validate(r *OpAMPBridge) (admission.Warnings, error)
 		return warnings, fmt.Errorf("the OpAMP server endpoint is not specified")
 	}
 
+	// TODO validate headers
+
 	// validate OpAMPBridge capabilities
 	if len(r.Spec.Capabilities) == 0 {
 		return warnings, fmt.Errorf("the capabilities supported by OpAMP Bridge are not specified")
