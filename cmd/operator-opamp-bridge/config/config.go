@@ -18,7 +18,6 @@ import (
 	"crypto/rand"
 	"errors"
 	"fmt"
-	"go.opentelemetry.io/collector/config/configopaque"
 	"io/fs"
 	"net/url"
 	"os"
@@ -93,12 +92,12 @@ type Config struct {
 	RootLogger         logr.Logger  `yaml:"-"`
 
 	// ComponentsAllowed is a list of allowed OpenTelemetry components for each pipeline type (receiver, processor, etc.)
-	ComponentsAllowed map[string][]string            `yaml:"componentsAllowed,omitempty"`
-	Endpoint          string                         `yaml:"endpoint"`
-	Headers           map[string]configopaque.String `yaml:"headers"`
-	Capabilities      map[Capability]bool            `yaml:"capabilities"`
-	HeartbeatInterval time.Duration                  `yaml:"heartbeatInterval,omitempty"`
-	Name              string                         `yaml:"name,omitempty"`
+	ComponentsAllowed map[string][]string `yaml:"componentsAllowed,omitempty"`
+	Endpoint          string              `yaml:"endpoint"`
+	Headers           map[string]string   `yaml:"headers,omitempty"`
+	Capabilities      map[Capability]bool `yaml:"capabilities"`
+	HeartbeatInterval time.Duration       `yaml:"heartbeatInterval,omitempty"`
+	Name              string              `yaml:"name,omitempty"`
 }
 
 func NewConfig(logger logr.Logger) *Config {

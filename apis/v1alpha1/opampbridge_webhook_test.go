@@ -17,7 +17,6 @@ package v1alpha1
 import (
 	"context"
 	"fmt"
-	"go.opentelemetry.io/collector/config/configopaque"
 	"os"
 	"testing"
 
@@ -147,7 +146,7 @@ func TestOpAMPBridgeValidatingWebhook(t *testing.T) {
 				},
 				Spec: OpAMPBridgeSpec{
 					Endpoint: "ws://opamp-server:4320/v1/opamp",
-					Headers:  map[string]configopaque.String{"access-token": "foo"},
+					Headers:  map[string]string{"access-token": "foo"},
 					Capabilities: map[OpAMPBridgeCapability]bool{
 						OpAMPBridgeCapabilityReportsStatus:                  true,
 						OpAMPBridgeCapabilityAcceptsRemoteConfig:            true,
