@@ -189,7 +189,7 @@ func (agent *Agent) Start() error {
 func (agent *Agent) headersToHttpHeader() http.Header {
 	newMap := make(map[string][]string)
 	for key, value := range agent.config.Headers {
-		newMap[key] = []string{string(value)}
+		newMap[key] = []string{value}
 	}
 	return newMap
 }
