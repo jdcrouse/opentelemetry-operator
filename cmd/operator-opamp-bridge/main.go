@@ -18,8 +18,6 @@ import (
 	"os"
 	"os/signal"
 
-	"github.com/spf13/pflag"
-
 	"github.com/open-telemetry/opentelemetry-operator/cmd/operator-opamp-bridge/agent"
 	"github.com/open-telemetry/opentelemetry-operator/cmd/operator-opamp-bridge/config"
 	"github.com/open-telemetry/opentelemetry-operator/cmd/operator-opamp-bridge/operator"
@@ -27,20 +25,12 @@ import (
 
 func main() {
 	l := config.GetLogger()
-
-	flagSet := config.GetFlagSet(pflag.ExitOnError)
-	err := flagSet.Parse(os.Args)
-	if err != nil {
-		l.Error(err, "Unable to load flags")
-		os.Exit(1)
-	}
-	cfg, configLoadErr := config.Load(l, flagSet)
+	cfg, configLoadErr := config.Load()
 	if configLoadErr != nil {
 		l.Error(configLoadErr, "Unable to load configuration")
 		os.Exit(1)
 	}
 	l.Info("Starting the Remote Configuration service")
-
 	kubeClient, kubeErr := cfg.GetKubernetesClient()
 	if kubeErr != nil {
 		l.Error(kubeErr, "Couldn't create kubernetes client")

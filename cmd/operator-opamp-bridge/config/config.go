@@ -106,6 +106,11 @@ func NewConfig(logger logr.Logger) *Config {
 	}
 }
 
+// TODO
+func CreateDefaultConfig() *Config {
+	return &Config{}
+}
+
 func (c *Config) CreateClient() opampclient.OpAMPClient {
 	opampLogger := logger.NewLogger(c.RootLogger.WithName("client"))
 	agentScheme := c.GetAgentScheme()
@@ -203,8 +208,14 @@ func (c *Config) GetKubernetesClient() (client.Client, error) {
 	})
 }
 
-func Load(logger logr.Logger, flagSet *pflag.FlagSet) (*Config, error) {
-	cfg := NewConfig(logger)
+func Load() (*Config, error) {
+	flagSet := GetFlagSet(pflag.ExitOnError)
+	err := flagSet.Parse(os.Args)
+	if err != nil {
+		return nil, err
+	}
+
+	cfg := CreateDefaultConfig()
 
 	// load the config from the config file
 	configFilePath, err := getConfigFilePath(flagSet)
@@ -226,6 +237,8 @@ func Load(logger logr.Logger, flagSet *pflag.FlagSet) (*Config, error) {
 
 func LoadFromCLI(target *Config, flagSet *pflag.FlagSet) error {
 	var err error
+	// set the rest of the config attributes based on command-line flag values
+	target.RootLogger = zap.New(zap.UseFlagOptions(&zapCmdLineOpts))
 	klog.SetLogger(target.RootLogger)
 	ctrl.SetLogger(target.RootLogger)
 
